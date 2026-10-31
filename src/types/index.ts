@@ -93,6 +93,7 @@ export interface ForensicFinding {
   confidenceScore: number; // e.g. 0.94
   limitationDisclaimer: string;
   status: 'confirmed' | 'disproven' | 'pending_verification';
+  severity: 'low' | 'medium' | 'critical';
   boundingBox?: ForensicBoundingBox;
 }
 
