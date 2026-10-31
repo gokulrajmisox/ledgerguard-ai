@@ -424,8 +424,8 @@ export function Console3DGraph({
               onClick={() => setFilterType(f.id)}
               className={`px-2.5 py-1 text-[11px] font-mono rounded transition-all ${
                 filterType === f.id
-                  ? "bg-white/20 text-white font-semibold"
-                  : "text-zinc-400 hover:text-white"
+                  ? "bg-[#6F4E37] text-white font-bold shadow-sm"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
               }`}
             >
               {f.label}
@@ -437,7 +437,7 @@ export function Console3DGraph({
         <div className="flex items-center gap-1 p-1 rounded-lg bg-black/70 border border-white/10 backdrop-blur-md pointer-events-auto">
           <button
             onClick={() => handleZoom(0.85)}
-            className="p-1.5 text-zinc-400 hover:text-white rounded hover:bg-white/10"
+            className="p-1.5 text-white/90 hover:text-white rounded hover:bg-white/20 transition-colors"
             title="Zoom In"
             aria-label="Zoom In"
           >
@@ -445,7 +445,7 @@ export function Console3DGraph({
           </button>
           <button
             onClick={() => handleZoom(1.15)}
-            className="p-1.5 text-zinc-400 hover:text-white rounded hover:bg-white/10"
+            className="p-1.5 text-white/90 hover:text-white rounded hover:bg-white/20 transition-colors"
             title="Zoom Out"
             aria-label="Zoom Out"
           >
@@ -453,7 +453,7 @@ export function Console3DGraph({
           </button>
           <button
             onClick={handleResetCamera}
-            className="p-1.5 text-zinc-400 hover:text-white rounded hover:bg-white/10"
+            className="p-1.5 text-white/90 hover:text-white rounded hover:bg-white/20 transition-colors"
             title="Reset Camera"
             aria-label="Reset Camera"
           >
@@ -463,7 +463,7 @@ export function Console3DGraph({
       </div>
 
       {/* Bottom Color Semantics Legend */}
-      <div className="absolute bottom-4 left-4 flex items-center gap-4 px-3 py-2 rounded-lg bg-black/80 border border-white/10 text-[10px] font-mono text-zinc-400 backdrop-blur-md">
+      <div className="absolute bottom-4 left-4 hidden sm:flex items-center gap-4 px-3.5 py-2 rounded-xl bg-black/90 border border-white/20 text-xs font-mono text-white/90 backdrop-blur-md shadow-lg">
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-[#00ff87]" />
           <span>Verified Match</span>
@@ -480,9 +480,9 @@ export function Console3DGraph({
 
       {/* Selected Entity Preview Drawer */}
       {selectedNode && (
-        <div className="absolute bottom-4 right-4 max-w-xs p-4 rounded-xl border border-white/15 bg-black/90 backdrop-blur-xl shadow-2xl text-xs">
+        <div className="absolute bottom-4 right-4 max-w-xs p-4 rounded-xl border border-[#6F4E37]/50 bg-[#221B17] backdrop-blur-xl shadow-2xl text-xs">
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
-            <span className="text-[10px] font-mono uppercase text-zinc-400">
+            <span className="text-[10px] font-mono uppercase text-[#E5E4E2] font-bold">
               {selectedNode.type.toUpperCase()} NODE
             </span>
             <span
@@ -506,11 +506,11 @@ export function Console3DGraph({
             </div>
           )}
 
-          <p className="text-[11px] font-mono text-zinc-300 leading-relaxed mb-3">
+          <p className="text-xs font-mono text-[#E5E4E2] leading-relaxed mb-3">
             {selectedNode.details}
           </p>
 
-          <div className="text-[10px] font-mono text-zinc-500">
+          <div className="text-[10px] font-mono text-[#A58F82] font-semibold">
             ORBIT: DRAG • ZOOM: SCROLL • SELECT: CLICK
           </div>
         </div>

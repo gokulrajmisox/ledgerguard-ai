@@ -1,130 +1,171 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { useAppStore } from "@/lib/store";
 import { formatCurrency } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, TrendingUp, AlertTriangle, ShieldCheck, CheckCircle2, X } from "lucide-react";
+
+// Dynamically load the WebGL CrystalizedBall component
+const CrystalizedBall = dynamic(() => import("./CrystalizedBall"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[360px] flex items-center justify-center">
+      <div className="w-32 h-32 rounded-full border-2 border-dashed border-[#6F4E37]/30 animate-spin" />
+    </div>
+  ),
+});
 
 export function FinancialInsight() {
-  const { invoices } = useAppStore();
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [tooltipContent, setTooltipContent] = useState<{title: string, value: string, description: string} | null>(null);
-  
+  const { invoices, cases } = useAppStore();
+  const [activeInsightIndex, setActiveInsightIndex] = useState<number | null>(0);
+  const [ballColor, setBallColor] = useState<string>("#6F4E37"); // Brand Mocha
+
   const totalAmount = invoices.reduce((sum, i) => sum + i.totalAmount, 0);
-  const reconciledAmount = invoices.filter(i => i.status === "reconciled").reduce((sum, i) => sum + i.totalAmount, 0);
+  const reconciledAmount = invoices
+    .filter((i) => i.status === "reconciled")
+    .reduce((sum, i) => sum + i.totalAmount, 0);
   const pendingAmount = totalAmount - reconciledAmount;
   const reconciliationRate = totalAmount > 0 ? (reconciledAmount / totalAmount) * 100 : 0;
 
   const insights = [
     {
-      title: "Total Processed",
-      value: formatCurrency(totalAmount),
-      description: "Total value of all invoices in the system"
-    },
-    {
-      title: "Reconciled",
+      title: "Reconciled Capital",
       value: formatCurrency(reconciledAmount),
-      description: "Invoices successfully matched and reconciled"
+      description: "Successfully matched across PO and bank rails with 0 variance.",
+      color: "#25663B",
+      ballColor: "#25663B",
+      icon: CheckCircle2,
     },
     {
-      title: "Pending Review",
+      title: "Active In Dispute",
       value: formatCurrency(pendingAmount),
-      description: "Invoices requiring your attention"
+      description: "Flagged invoices with quantization divergence or price discrepancies.",
+      color: "#946000",
+      ballColor: "#946000",
+      icon: AlertTriangle,
     },
     {
-      title: "Reconciliation Rate",
+      title: "Total Intake Volume",
+      value: formatCurrency(totalAmount),
+      description: "Normalized invoice total across all authorized vendor accounts.",
+      color: "#6F4E37",
+      ballColor: "#6F4E37",
+      icon: TrendingUp,
+    },
+    {
+      title: "Assurance Ratio",
       value: `${Math.round(reconciliationRate)}%`,
-      description: "Percentage of invoices successfully reconciled"
-    }
+      description: "Cryptographically verified and sealed in Merkle audit logs.",
+      color: "#216766",
+      ballColor: "#E6E0F0",
+      icon: ShieldCheck,
+    },
   ];
 
-  // Simple 3D crystal visualization using CSS
   return (
-    <div className="w-full h-full relative bg-gradient-to-br from-mocha/5 to-mocha/10 rounded-xl overflow-hidden">
-      {/* 3D Crystal Shape using CSS transforms */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-48 h-48">
-          {/* Octahedron shape using CSS */}
-          <div className="absolute inset-0 transform-gpu animate-float">
-            {/* Top pyramid */}
-            <div className="absolute w-0 h-0 border-l-[24px] border-r-[24px] border-b-[40px] border-l-transparent border-r-transparent border-b-mocha/30 top-0 left-1/2 -translate-x-1/2" />
-            {/* Bottom pyramid (inverted) */}
-            <div className="absolute w-0 h-0 border-l-[24px] border-r-[24px] border-t-[40px] border-l-transparent border-r-transparent border-t-mocha/30 bottom-0 left-1/2 -translate-x-1/2" />
-            {/* Middle diamond */}
-            <div className="absolute w-20 h-20 bg-mocha/20 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+    <div className="w-full h-full rounded-2xl border border-[#D7D0C9] bg-white p-6 shadow-lg flex flex-col justify-between relative overflow-hidden">
+      {/* Top Header */}
+      <div className="flex items-center justify-between pb-4 border-b border-[#D7D0C9]">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#6F4E37]" />
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#5C4F47]">
+              SIGNATURE 3D SENSORY VISUALIZATION
+            </span>
           </div>
-          
-          {/* Floating particles */}
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-mocha/40 rounded-full animate-pulse"
-              style={{
-                left: `${20 + i * 10}%`,
-                top: `${15 + (i % 4) * 15}%`,
-                animationDelay: `${i * 0.2}s`,
-              }}
+          <h3 className="text-xl font-bold serif-display text-[#30231D]">
+            Autonomous Intelligence Core
+          </h3>
+        </div>
+
+        {/* Color Palette Switcher */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-mono text-[#5C4F47] mr-1 hidden sm:inline">Theme:</span>
+          {["#6F4E37", "#25663B", "#946000", "#E6E0F0"].map((c) => (
+            <button
+              key={c}
+              onClick={() => setBallColor(c)}
+              className={`w-5 h-5 rounded-full border-2 transition-transform cursor-pointer ${
+                ballColor === c ? "scale-125 border-[#30231D] shadow-sm" : "border-white opacity-70"
+              }`}
+              style={{ backgroundColor: c }}
+              title={`Switch core color to ${c}`}
+              aria-label={`Switch core color to ${c}`}
             />
           ))}
         </div>
       </div>
 
-      {/* Overlay with financial summary */}
-      <div className="absolute bottom-4 left-4 right-4 bg-ivory/90 backdrop-blur-md rounded-lg border border-mocha/20 p-4">
-        <h4 className="text-sm font-medium text-espresso mb-3">Financial Overview</h4>
-        <div className="grid grid-cols-2 gap-3">
-          {insights.map((insight, index) => (
-            <div
-              key={index}
-              className="p-2 rounded border border-mocha/10 hover:bg-mocha/5 cursor-pointer transition-all"
-              onClick={() => {
-                setTooltipContent(insight);
-                setShowTooltip(true);
-              }}
-            >
-              <div className="text-xs text-taupe truncate">{insight.title}</div>
-              <div className="text-lg font-bold text-mocha">{insight.value}</div>
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-taupe/70 mt-2">
-          Click on the crystal to explore. Hover over elements for details.
-        </p>
-      </div>
-      
-      {/* Tooltip */}
-      {showTooltip && tooltipContent && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-ivory border border-mocha/20 rounded-lg shadow-xl p-4 max-w-xs z-50 animate-fade-in">
-          <h5 className="text-sm font-bold text-espresso mb-2">{tooltipContent.title}</h5>
-          <div className="text-xl font-bold text-mocha mb-2">{tooltipContent.value}</div>
-          <p className="text-sm text-taupe">{tooltipContent.description}</p>
-          <button
-            onClick={() => setShowTooltip(false)}
-            className="mt-3 px-3 py-1 bg-mocha/10 text-mocha text-sm rounded hover:bg-mocha/20 transition-colors"
-          >
-            Close
-          </button>
-        </div>
-      )}
+      {/* Center 3D CrystalizedBall Container */}
+      <div className="relative w-full h-[280px] sm:h-[320px] my-2 rounded-xl bg-gradient-to-b from-[#F7F5F1] to-[#EDE8DE] border border-[#D7D0C9] overflow-hidden">
+        <CrystalizedBall
+          style={{ width: "100%", height: "100%" }}
+          preset="plasma"
+          color={ballColor}
+          size={0.7}
+          crackle={0.75}
+          fill={0.55}
+          interactive
+          hoverStrength={0.65}
+          strands={6}
+          flares={0.6}
+          glow={0.8}
+          sparks={0.5}
+          particleCount={12000}
+          motion="rise"
+          particleShape="square"
+          depth={0.6}
+          sway={0.4}
+          twinkle={0.5}
+          haze={0.6}
+          dustSpeed={1}
+          speed={1}
+          intro
+          paused={false}
+        />
 
-      {/* Animation styles */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
-          50% { transform: translateY(-10px) rotateX(180deg) rotateY(180deg); }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
+        {/* Micro HUD Overlay */}
+        <div className="absolute bottom-2 left-3 text-[10px] font-mono text-[#5C4F47] pointer-events-none">
+          MOVE CURSOR TO DIRECT PLASMA FLARES • CLICK METRIC TO TUNE CORE
+        </div>
+      </div>
+
+      {/* Bottom Insights Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-3">
+        {insights.map((insight, idx) => {
+          const isSelected = activeInsightIndex === idx;
+          const Icon = insight.icon;
+          return (
+            <button
+              key={insight.title}
+              onClick={() => {
+                setActiveInsightIndex(idx);
+                setBallColor(insight.ballColor);
+              }}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                isSelected
+                  ? "bg-[#F7F5F1] border-[#6F4E37] ring-2 ring-[#6F4E37]/15 shadow-sm"
+                  : "bg-white border-[#D7D0C9] hover:bg-[#F7F5F1] hover:border-[#6F4E37]/40"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[11px] font-mono font-bold text-[#5C4F47] uppercase truncate">
+                  {insight.title}
+                </span>
+                <Icon className="w-3.5 h-3.5 text-[#6F4E37]" />
+              </div>
+              <div className="text-lg font-bold text-[#30231D] font-mono tracking-tight">
+                {insight.value}
+              </div>
+              <p className="text-[11px] text-[#5C4F47] line-clamp-1 mt-0.5">
+                {insight.description}
+              </p>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
-
-export default FinancialInsight;

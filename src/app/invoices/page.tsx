@@ -6,7 +6,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { useAppStore } from "@/lib/store";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
-import { Search, Filter, FileText, Eye, ArrowRight, Plus } from "lucide-react";
+import { Search, Filter, FileText, Eye, ArrowRight, Plus, CheckCircle2, AlertTriangle, ShieldCheck } from "lucide-react";
 
 export default function InvoicesPage() {
   const { invoices } = useAppStore();
@@ -25,20 +25,19 @@ export default function InvoicesPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "reconciled":
-        return "bg-status-success/20 text-status-success border border-status-success/30";
+        return "badge-success";
       case "discrepant":
-        return "bg-status-error/20 text-status-error border border-status-error/30";
-      case "investigating":
-        return "bg-status-warning/20 text-status-warning border border-status-warning/30";
       case "duplicate_suspect":
-        return "bg-status-error/20 text-status-error border border-status-error/30";
+        return "badge-error";
+      case "investigating":
+        return "badge-warning";
       default:
-        return "bg-platinum text-taupe";
+        return "badge-info";
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-ivory text-espresso">
+    <div className="min-h-screen flex flex-col bg-[#F7F5F1] text-[#30231D]">
       <Navbar />
 
       <div className="flex-1 flex pt-16">
@@ -46,180 +45,143 @@ export default function InvoicesPage() {
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full overflow-hidden">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-mocha/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D7D0C9]">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="w-2 h-2 rounded-full bg-mocha" />
-                <span className="text-xs font-mono uppercase tracking-widest text-mocha">
-                  INVOICE MANAGEMENT
+                <span className="w-2 h-2 rounded-full bg-[#6F4E37]" />
+                <span className="text-xs font-mono uppercase tracking-widest text-[#6F4E37] font-bold">
+                  LEDGER INVENTORY
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold serif-display text-espresso">
-                All Invoices
+              <h1 className="text-2xl sm:text-3xl font-black serif-display text-[#30231D]">
+                Invoices & Disbursements
               </h1>
             </div>
 
             <Link
               href="/reconciliation"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-ivory bg-mocha hover:bg-mocha/90 transition-all shadow-md hover:shadow-lg"
+              className="btn-primary"
             >
               <Plus className="w-4 h-4" />
-              <span>Add Invoice</span>
+              <span>Upload New Invoice</span>
             </Link>
           </div>
 
-          {/* Search & Filters */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Search & Filter Controls */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-taupe" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C4F47]" />
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search invoice #, vendor..."
-                className="w-full pl-9 pr-4 py-2 bg-platinum border border-mocha/20 rounded-lg text-sm font-mono text-espresso placeholder-taupe focus:outline-none focus:border-mocha focus:ring-1 focus:ring-mocha/20"
+                placeholder="Search by invoice #, vendor name..."
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#D7D0C9] rounded-xl text-xs font-mono text-[#30231D] placeholder-[#7E7067] focus:outline-none focus:border-[#6F4E37] focus:ring-2 focus:ring-[#6F4E37]/15 shadow-xs"
               />
             </div>
 
-            <div className="flex items-center gap-2 text-sm font-mono">
-              <span className="text-taupe">Status:</span>
-              <div className="flex items-center gap-1 p-1 rounded-lg bg-platinum border border-mocha/10">
-                {[
-                  { id: "all", label: "All" },
-                  { id: "reconciled", label: "Reconciled" },
-                  { id: "discrepant", label: "Discrepant" },
-                  { id: "investigating", label: "Investigating" },
-                  { id: "duplicate_suspect", label: "Duplicate" },
-                ].map((s) => (
-                  <button
-                    key={s.id}
-                    onClick={() => setStatusFilter(s.id)}
-                    className={`px-3 py-1 rounded text-xs ${
-                      statusFilter === s.id 
-                        ? "bg-mocha/10 text-mocha font-bold" 
-                        : "text-taupe hover:text-mocha"
-                    }`}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
+            {/* Filter Pills with High Contrast */}
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white border border-[#D7D0C9] shadow-xs overflow-x-auto">
+              {[
+                { id: "all", label: "All Items" },
+                { id: "reconciled", label: "Reconciled" },
+                { id: "discrepant", label: "Discrepant" },
+                { id: "investigating", label: "Investigating" },
+                { id: "duplicate_suspect", label: "Duplicate Suspect" },
+              ].map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => setStatusFilter(s.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                    statusFilter === s.id
+                      ? "bg-[#6F4E37] text-white shadow-xs"
+                      : "text-[#30231D] hover:bg-[#F7F5F1]"
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Summary Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="card text-center py-4">
-              <div className="text-xl font-bold text-mocha">{invoices.length}</div>
-              <div className="text-xs text-taupe mt-1">Total</div>
+          {/* Summary Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="card py-4 text-center">
+              <div className="text-2xl font-bold font-mono text-[#6F4E37]">{invoices.length}</div>
+              <div className="text-xs font-mono font-bold uppercase text-[#5C4F47] mt-1">Total Records</div>
             </div>
-            <div className="card text-center py-4">
-              <div className="text-xl font-bold text-status-success">
-                {invoices.filter(i => i.status === "reconciled").length}
+            <div className="card py-4 text-center">
+              <div className="text-2xl font-bold font-mono text-[#25663B]">
+                {invoices.filter((i) => i.status === "reconciled").length}
               </div>
-              <div className="text-xs text-taupe mt-1">Reconciled</div>
+              <div className="text-xs font-mono font-bold uppercase text-[#5C4F47] mt-1">Reconciled</div>
             </div>
-            <div className="card text-center py-4">
-              <div className="text-xl font-bold text-status-warning">
-                {invoices.filter(i => i.status === "discrepant" || i.status === "investigating").length}
+            <div className="card py-4 text-center">
+              <div className="text-2xl font-bold font-mono text-[#946000]">
+                {invoices.filter((i) => i.status === "discrepant" || i.status === "investigating").length}
               </div>
-              <div className="text-xs text-taupe mt-1">Need Review</div>
+              <div className="text-xs font-mono font-bold uppercase text-[#5C4F47] mt-1">Under Review</div>
             </div>
-            <div className="card text-center py-4">
-              <div className="text-xl font-bold text-status-error">
-                {invoices.filter(i => i.status === "duplicate_suspect").length}
+            <div className="card py-4 text-center">
+              <div className="text-2xl font-bold font-mono text-[#B52A2A]">
+                {invoices.filter((i) => i.status === "duplicate_suspect").length}
               </div>
-              <div className="text-xs text-taupe mt-1">Duplicates</div>
+              <div className="text-xs font-mono font-bold uppercase text-[#5C4F47] mt-1">Duplicates Flagged</div>
             </div>
           </div>
 
-          {/* Invoices Table */}
-          <div className="card">
+          {/* Invoices Data Table */}
+          <div className="card p-0 overflow-hidden shadow-md">
             <div className="table-container">
               <table className="table">
                 <thead>
                   <tr>
-                    <th className="text-xs font-medium text-taupe uppercase tracking-wider">
-                      Invoice #
-                    </th>
-                    <th className="text-xs font-medium text-taupe uppercase tracking-wider">
-                      Vendor
-                    </th>
-                    <th className="text-xs font-medium text-taupe uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="text-xs font-medium text-taupe uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th className="text-xs font-medium text-taupe uppercase tracking-wider">
-                      PO Number
-                    </th>
-                    <th className="text-xs font-medium text-taupe uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="text-xs font-medium text-taupe uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <th>Invoice #</th>
+                    <th>Vendor</th>
+                    <th>Issue Date</th>
+                    <th>Amount</th>
+                    <th>PO Number</th>
+                    <th>Status</th>
+                    <th className="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredInvoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-platinum/50 transition-colors">
-                      <td className="text-sm font-mono text-mocha">
+                    <tr key={invoice.id} className="hover:bg-[#F7F5F1] transition-colors">
+                      <td className="text-xs font-mono font-bold text-[#6F4E37]">
                         {invoice.invoiceNumber}
                       </td>
-                      <td className="text-sm text-espresso">
+                      <td className="text-xs font-semibold text-[#30231D]">
                         {invoice.vendorName}
                       </td>
-                      <td className="text-sm text-taupe">
+                      <td className="text-xs font-medium text-[#5C4F47]">
                         {formatDate(invoice.issueDate)}
                       </td>
-                      <td className="text-sm font-medium text-espresso">
+                      <td className="text-xs font-bold font-mono text-[#30231D]">
                         {formatCurrency(invoice.totalAmount)}
                       </td>
-                      <td className="text-sm font-mono text-taupe">
-                        {invoice.poNumber}
+                      <td className="text-xs font-mono text-[#5C4F47]">
+                        {invoice.poNumber || "N/A"}
                       </td>
                       <td>
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${getStatusBadge(invoice.status)}`}>
-                          {invoice.status.replace("_", " ")}
+                        <span className={getStatusBadge(invoice.status)}>
+                          {invoice.status.replace("_", " ").toUpperCase()}
                         </span>
                       </td>
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <Link
-                            href={`/document-check?invoice=${invoice.id}`}
-                            className="p-1.5 rounded hover:bg-mocha/10 transition-colors"
-                            title="View Document"
-                          >
-                            <Eye className="w-4 h-4 text-mocha" />
-                          </Link>
-                          <Link
-                            href={`/reconciliation?invoice=${invoice.id}`}
-                            className="p-1.5 rounded hover:bg-mocha/10 transition-colors"
-                            title="Reconcile"
-                          >
-                            <ArrowRight className="w-4 h-4 text-mocha" />
-                          </Link>
-                        </div>
+                      <td className="text-right">
+                        <Link
+                          href={`/document-check?invoice=${invoice.id}`}
+                          className="btn-outline py-1 px-3 text-xs"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>Forensics</span>
+                        </Link>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            
-            {filteredInvoices.length === 0 && (
-              <div className="text-center py-12">
-                <FileText className="w-12 h-12 mx-auto text-mocha/30 mb-4" />
-                <h3 className="text-lg font-medium text-espresso mb-2">
-                  No invoices found
-                </h3>
-                <p className="text-taupe text-sm">
-                  Try adjusting your search or filter criteria
-                </p>
-              </div>
-            )}
           </div>
         </main>
       </div>

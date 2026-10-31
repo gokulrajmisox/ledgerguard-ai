@@ -16,16 +16,16 @@ export function InvestigationQueueCard({
   onSelectCase?: (c: InvestigationCase) => void;
 }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-[#0c0c12] p-4 sm:p-5 shadow-xl">
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+    <div className="card-luxury p-5 space-y-4">
+      <div className="flex items-center justify-between pb-3 border-b border-[#D7D0C9]">
         <div className="flex items-center gap-2">
-          <ShieldAlert className="w-4 h-4 text-[#ff3355]" />
-          <h3 className="text-xs font-mono font-bold uppercase text-white tracking-wider">
-            Active Investigation Queue
+          <ShieldAlert className="w-4 h-4 text-[#B52A2A]" />
+          <h3 className="text-xs font-mono font-bold uppercase text-espresso tracking-wider">
+            Active Forensics & Exception Queue
           </h3>
         </div>
-        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">
-          {cases.length} FLAGGED CASES
+        <span className="text-[10px] font-mono px-2.5 py-1 rounded-full badge-neutral font-bold">
+          {cases.length} FLAGGED CASIONS
         </span>
       </div>
 
@@ -35,59 +35,56 @@ export function InvestigationQueueCard({
           const isP1 = c.priority === "P1";
           const priorityBadge =
             c.priority === "P1"
-              ? "bg-[#ff3355]/20 text-[#ff3355] border-[#ff3355]/40"
-              : "bg-[#f59e0b]/20 text-[#f59e0b] border-[#f59e0b]/40";
+              ? "badge-error"
+              : "badge-warning";
 
           const statusBadge =
             c.status === "approved"
-              ? "bg-[#00ff87]/20 text-[#00ff87]"
+              ? "badge-success"
               : c.status === "escalated"
-              ? "bg-[#ff3355]/20 text-[#ff3355]"
-              : "bg-zinc-800 text-zinc-300";
+              ? "badge-error"
+              : "badge-neutral";
 
           return (
             <div
               key={c.id}
               onClick={() => onSelectCase && onSelectCase(c)}
-              className={`p-3.5 rounded-lg border transition-all cursor-pointer ${
+              className={`p-4 rounded-xl border transition-all cursor-pointer ${
                 isSelected
-                  ? "border-[#ff3355]/60 bg-white/[0.06] shadow-lg"
-                  : "border-white/[0.06] bg-black/40 hover:bg-white/[0.02]"
+                  ? "border-[#6F4E37] bg-[#E6E0F0]/25 shadow-md ring-2 ring-[#6F4E37]/20"
+                  : "border-[#D7D0C9] bg-white hover:bg-[#F7F5F1]"
               }`}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded border font-bold ${priorityBadge}`}>
-                    {c.priority} CRITICAL
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${priorityBadge}`}>
+                    {c.priority}
                   </span>
-                  <span className="text-xs font-mono font-bold text-white">
-                    {c.caseNumber}
-                  </span>
+                  <span className="text-xs font-mono font-bold text-espresso">{c.caseNumber}</span>
                 </div>
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-semibold ${statusBadge}`}>
-                  {c.status.replace("_", " ")}
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${statusBadge}`}>
+                  {c.status}
                 </span>
               </div>
 
-              <div className="text-xs font-semibold text-zinc-200 mb-1">{c.vendorName}</div>
-
-              <div className="flex items-center justify-between font-mono text-xs mb-2">
-                <span className="text-zinc-400">Disputed Amount:</span>
-                <span className="text-[#ff3355] font-bold">
-                  {formatCurrency(c.amountInDispute)}
+              <div className="flex items-center justify-between text-xs font-mono mb-2">
+                <span className="text-espresso font-semibold">{c.vendorName}</span>
+                <span className="text-[#B52A2A] font-bold">
+                  Delta: +{formatCurrency(c.reconciliationDelta || c.amountInDispute)}
                 </span>
               </div>
 
-              <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed mb-3 font-mono">
+              <p className="text-xs text-[#5C4F47] leading-relaxed mb-3">
                 {c.summary}
               </p>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] font-mono">
-                <span className="text-zinc-500">{formatDate(c.detectedAt)}</span>
+              <div className="flex items-center justify-between pt-2 border-t border-[#D7D0C9] text-xs">
+                <span className="text-[11px] font-mono text-[#5C4F47]">
+                  {c.forensicFindings?.length || 0} anomalies detected
+                </span>
                 <Link
-                  href={`/investigations/${c.id}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-1 text-[#00ff87] hover:underline"
+                  href="/document-check"
+                  className="btn-outline py-1 px-2.5 text-xs font-bold inline-flex items-center gap-1"
                 >
                   <span>Open Dossier</span>
                   <ArrowRight className="w-3 h-3" />

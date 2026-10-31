@@ -3,71 +3,73 @@
 import React, { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { HelpCircle, BookOpen, MessageSquare, Search, ArrowLeft, FileText, Link2, Eye, CheckCircle2 } from "lucide-react";
+import { HelpCircle, BookOpen, MessageSquare, Search, FileText, Link2, Eye, CheckCircle2, ChevronDown, ShieldCheck, Mail, ExternalLink, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { fadeInUp, staggerContainer } from "@/lib/motion";
 
 export default function HelpPage() {
   const [activeSection, setActiveSection] = useState<"getting-started" | "workflows" | "faq" | "contact">("getting-started");
   const [searchTerm, setSearchTerm] = useState("");
+  const [expandedFaq, setExpandedFaq] = useState<string | null>("faq1");
 
   const gettingStartedSteps = [
     {
       id: "step1",
-      title: "Upload Your First Document",
-      description: "Start by uploading an invoice, purchase order, or bank statement. Tesseract will automatically extract the key information.",
-      icon: <FileText className="w-6 h-6" />,
+      title: "1. Ingest Invoices & Documentation",
+      description: "Upload digital PDFs, scanned receipts, or wire statements. Tesseract's neural optical character recognition extracts line-item totals, tax registrations, and bank routing numbers.",
+      icon: <FileText className="w-5 h-5 text-white" />,
     },
     {
       id: "step2",
-      title: "Review Extracted Data",
-      description: "Check the extracted information for accuracy. You can edit any field if the automatic extraction missed something.",
-      icon: <Eye className="w-6 h-6" />,
+      title: "2. Automated 3-Way Cross-Check",
+      description: "Tesseract cross-references each invoice against corresponding enterprise Purchase Orders and cleared Treasury settlements with zero-tolerance math validation.",
+      icon: <Link2 className="w-5 h-5 text-white" />,
     },
     {
       id: "step3",
-      title: "Match Records",
-      description: "Tesseract will automatically match invoices to purchase orders and bank transactions. Review the matches and fix any discrepancies.",
-      icon: <Link2 className="w-6 h-6" />,
+      title: "3. Forensic PDF Discrepancy Detection",
+      description: "Error Level Analysis (ELA) and typography verification detect font substitution, altered wire instructions, and spliced amounts before payment release.",
+      icon: <Eye className="w-5 h-5 text-white" />,
     },
     {
       id: "step4",
-      title: "Resolve Issues",
-      description: "For any discrepancies, Tesseract will explain the issue in plain language. You can approve, reject, or request clarification.",
-      icon: <CheckCircle2 className="w-6 h-6" />,
+      title: "4. Immutable Cryptographic Signing",
+      description: "Every audit decision, variance sign-off, or payment approval is permanently linked in a SHA-256 Merkle chain for verifiable SOX and statutory compliance.",
+      icon: <CheckCircle2 className="w-5 h-5 text-white" />,
     },
   ];
 
   const workflows = [
     {
       id: "reconciliation",
-      title: "Reconciliation Workflow",
+      title: "Deterministic 3-Way Reconciliation",
       steps: [
-        "Upload invoices, POs, and bank statements",
-        "Tesseract extracts and matches records automatically",
-        "Review matches and fix discrepancies",
-        "Approve or reject based on your review",
-        "All actions are recorded in the audit trail",
+        "Upload invoices, purchase orders, and bank settlement statements in bulk.",
+        "System extracts vendor names, PO reference keys, and line-item unit rates.",
+        "Tri-party matching algorithm flags any deviation above 0.00% tolerance.",
+        "Human auditors inspect line-item breakdowns with single-click resolution.",
+        "Actions are cryptographically sealed in the immutable activity log.",
       ],
     },
     {
       id: "document-check",
-      title: "Document Check Workflow",
+      title: "Document Forensics & Font Analysis",
       steps: [
-        "Upload a document for verification",
-        "Tesseract performs forensic analysis",
-        "Review extracted information and findings",
-        "Compare against authorized records",
-        "Get plain-language explanations of any issues",
+        "Select suspect PDF document for deep structural inspection.",
+        "Engine computes Error Level Analysis (ELA) heatmap to highlight modified regions.",
+        "OCR matrix detects font raster mismatches, altered invoice numbers, and rate deltas.",
+        "Plain-language intelligence report summarizes risk level and evidence rationale.",
+        "Auditors can hold payment, escalate to fraud team, or verify as authentic.",
       ],
     },
     {
       id: "connections",
-      title: "Connections Workflow",
+      title: "Entity & Settlement Relationship Mapping",
       steps: [
-        "View all document relationships",
-        "See how invoices link to POs and payments",
-        "Understand the connection reasons",
-        "Switch between list and graph views",
-        "Click on any connection to see details",
+        "Explore relationships between invoices, authorized POs, and cleared wires.",
+        "Switch between tabular listing and 3D evidence network topology.",
+        "Identify circular vendor relationships or duplicate billing attempts.",
+        "Export audit dossiers for internal treasury sign-offs.",
       ],
     },
   ];
@@ -75,28 +77,28 @@ export default function HelpPage() {
   const faqs = [
     {
       id: "faq1",
-      question: "What types of documents can I upload?",
-      answer: "You can upload PDF invoices, purchase orders, receipts, and bank statements. Tesseract supports most common document formats.",
+      question: "What file formats and billing standards does Tesseract support?",
+      answer: "Tesseract accepts PDF invoices, TIFF/PNG high-resolution scans, XML electronic invoices (UBL 2.1, Factur-X, ZUGFeRD), CSV/EDI purchase orders, and MT940 / CAMT.053 bank settlement statements.",
     },
     {
       id: "faq2",
-      question: "How accurate is the data extraction?",
-      answer: "Tesseract uses advanced OCR and AI to extract data with over 95% accuracy. You can always review and edit the extracted information.",
+      question: "How does Tesseract detect invoice manipulation and font fraud?",
+      answer: "Tesseract combines Error Level Analysis (ELA) with neural typography forensics. It examines compression artifacts across PDF layers to detect modified text boxes, font glyph weight inconsistencies, and spliced routing numbers.",
     },
     {
       id: "faq3",
-      question: "Is my data secure?",
-      answer: "Yes. All your data is encrypted and stored securely. Tesseract maintains an immutable audit trail of all actions for compliance.",
+      question: "What is the cryptographic audit trail and how is it verified?",
+      answer: "Every action taken—from automated matching to auditor approvals—generates a SHA-256 block hash incorporating the previous action's hash. This Merkle chain is cryptographically immutable, guaranteeing tamper-proof records for SOX 404 audit compliance.",
     },
     {
       id: "faq4",
-      question: "Can I export my data?",
-      answer: "Yes. You can export your invoices, reports, and audit logs in CSV, PDF, or Excel format from the Settings page.",
+      question: "Can Tesseract integrate directly with our existing ERP?",
+      answer: "Yes. Tesseract provides REST and webhook integrations for SAP S/4HANA, Oracle NetSuite, Workday Financial Management, and Microsoft Dynamics 365, allowing bidirectional synchronization without displacing existing workflows.",
     },
     {
       id: "faq5",
-      question: "What is the cryptographic audit trail?",
-      answer: "Every action you take in Tesseract is cryptographically linked to the previous action, creating an immutable chain of evidence. This ensures that no one can tamper with your financial records.",
+      question: "How are currency conversions and exchange rate fluctuations handled?",
+      answer: "Tesseract pulls authoritative daily central bank fixing rates (ECB, Federal Reserve, Bank of England). Any variance between the PO authorization date rate and the invoice presentation date rate is categorized as FX delta rather than pricing error.",
     },
   ];
 
@@ -114,265 +116,263 @@ export default function HelpPage() {
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full overflow-hidden">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-mocha/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D7D0C9]">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="w-2 h-2 rounded-full bg-mocha" />
-                <span className="text-xs font-mono uppercase tracking-widest text-mocha">
-                  SUPPORT CENTER
+                <span className="w-2.5 h-2.5 rounded-full bg-[#6F4E37]" />
+                <span className="text-xs font-mono uppercase tracking-widest text-[#6F4E37] font-bold">
+                  KNOWLEDGE BASE & GUIDELINES
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold serif-display text-espresso">
-                Help & Support
+              <h1 className="text-2xl sm:text-3xl font-bold serif-display text-espresso tracking-tight">
+                Help & Forensic Guidance
               </h1>
+              <p className="text-sm text-[#5C4F47] mt-1">
+                Operational guides, forensic analysis workflows, and enterprise compliance protocols
+              </p>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-1 p-1 rounded-lg bg-platinum border border-mocha/10">
-            <button
-              onClick={() => setActiveSection("getting-started")}
-              className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-all ${
-                activeSection === "getting-started"
-                  ? "bg-ivory text-mocha shadow-sm"
-                  : "text-taupe hover:text-mocha"
-              }`}
-            >
-              <BookOpen className="w-4 h-4" />
-              <span>Getting Started</span>
-            </button>
-            <button
-              onClick={() => setActiveSection("workflows")}
-              className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-all ${
-                activeSection === "workflows"
-                  ? "bg-ivory text-mocha shadow-sm"
-                  : "text-taupe hover:text-mocha"
-              }`}
-            >
-              <Link2 className="w-4 h-4" />
-              <span>Workflows</span>
-            </button>
-            <button
-              onClick={() => setActiveSection("faq")}
-              className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-all ${
-                activeSection === "faq"
-                  ? "bg-ivory text-mocha shadow-sm"
-                  : "text-taupe hover:text-mocha"
-              }`}
-            >
-              <HelpCircle className="w-4 h-4" />
-              <span>FAQ</span>
-            </button>
-            <button
-              onClick={() => setActiveSection("contact")}
-              className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-all ${
-                activeSection === "contact"
-                  ? "bg-ivory text-mocha shadow-sm"
-                  : "text-taupe hover:text-mocha"
-              }`}
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Contact</span>
-            </button>
+          <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-xl bg-white border border-[#D7D0C9] shadow-sm">
+            {[
+              { id: "getting-started", label: "Getting Started", icon: BookOpen },
+              { id: "workflows", label: "Core Workflows", icon: Link2 },
+              { id: "faq", label: "Frequently Asked Questions", icon: HelpCircle },
+              { id: "contact", label: "Enterprise Support", icon: MessageSquare },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeSection === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveSection(tab.id as any)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                    isActive
+                      ? "bg-[#6F4E37] text-white shadow-sm"
+                      : "text-[#30231D] hover:bg-[#F7F5F1] hover:text-[#6F4E37]"
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Content */}
-          <div className="card">
+          {/* Content Pane */}
+          <motion.div
+            key={activeSection}
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            className="space-y-6"
+          >
+            {/* Getting Started Section */}
             {activeSection === "getting-started" && (
               <div className="space-y-6">
-                <div className="text-center py-8">
-                  <h2 className="text-2xl font-bold serif-display text-espresso mb-2">
-                    Getting Started with Tesseract
-                  </h2>
-                  <p className="text-taupe">
-                    Follow these simple steps to start using Tesseract
-                  </p>
-                </div>
+                <div className="card-luxury p-6 sm:p-8">
+                  <div className="max-w-2xl mb-6">
+                    <h2 className="text-2xl font-bold serif-display text-espresso">
+                      Platform Architecture & Quick Start
+                    </h2>
+                    <p className="text-sm text-[#5C4F47] mt-1">
+                      Tesseract combines deterministic financial reconciliation with deep neural document forensics. Follow these four foundational steps:
+                    </p>
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {gettingStartedSteps.map((step, index) => (
-                    <div key={step.id} className="p-4 rounded-lg border border-mocha/20 hover:bg-platinum/50 transition-colors">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-mocha/10 flex items-center justify-center flex-shrink-0">
-                          <span className="text-lg font-bold text-mocha">{index + 1}</span>
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-lg font-bold text-espresso mb-2">{step.title}</h3>
-                          <p className="text-sm text-taupe">{step.description}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {gettingStartedSteps.map((step) => (
+                      <div
+                        key={step.id}
+                        className="p-5 rounded-xl border border-[#D7D0C9] bg-[#F7F5F1] hover:border-[#6F4E37] transition-all hover:shadow-sm"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-xl bg-[#6F4E37] flex items-center justify-center flex-shrink-0 shadow-sm">
+                            {step.icon}
+                          </div>
+                          <div>
+                            <h3 className="text-base font-bold text-espresso mb-1">{step.title}</h3>
+                            <p className="text-xs text-[#5C4F47] leading-relaxed">{step.description}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
-                <div className="p-4 rounded-lg bg-lavender/50 border border-mocha/10">
-                  <h3 className="text-lg font-bold text-espresso mb-3">Quick Tips</h3>
-                  <ul className="space-y-2">
-                    <li className="flex items-start gap-2">
-                      <span className="w-2 h-2 rounded-full bg-mocha mt-1.5 flex-shrink-0" />
-                      <span className="text-sm text-taupe">Use the Quick Actions wheel for fast navigation</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-2 h-2 rounded-full bg-mocha mt-1.5 flex-shrink-0" />
-                      <span className="text-sm text-taupe">Click on the Financial Insight crystal to explore your data</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-2 h-2 rounded-full bg-mocha mt-1.5 flex-shrink-0" />
-                      <span className="text-sm text-taupe">The Recent Documents carousel shows your most recent uploads</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-2 h-2 rounded-full bg-mocha mt-1.5 flex-shrink-0" />
-                      <span className="text-sm text-taupe">All actions are automatically added to the cryptographic audit trail</span>
-                    </li>
-                  </ul>
+                <div className="p-6 rounded-xl bg-[#E6E0F0]/40 border border-[#6F4E37]/20 card-luxury">
+                  <h3 className="text-base font-bold text-espresso mb-2 flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-[#6F4E37]" />
+                    <span>Auditor Best Practices</span>
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#5C4F47]">
+                    <div className="flex items-start gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#6F4E37] mt-1.5 shrink-0" />
+                      <span>Always cross-check bank routing numbers against the Master Vendor Register before releasing wires exceeding \$50,000.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#6F4E37] mt-1.5 shrink-0" />
+                      <span>Use Error Level Analysis (ELA) whenever line-item fonts show slight antialiasing differences or bounding box misalignment.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#6F4E37] mt-1.5 shrink-0" />
+                      <span>Audit comments are permanently cryptographically sealed; provide unambiguous justifications when overriding warnings.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#6F4E37] mt-1.5 shrink-0" />
+                      <span>Export periodic Merkle log dossiers for statutory SOX 404 audit archives from the Data & Governance tab.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
 
+            {/* Workflows Section */}
             {activeSection === "workflows" && (
               <div className="space-y-6">
-                <div className="text-center py-8">
-                  <h2 className="text-2xl font-bold serif-display text-espresso mb-2">
-                    Tesseract Workflows
-                  </h2>
-                  <p className="text-taupe">
-                    Understand how to use each Tesseract feature
-                  </p>
-                </div>
-
-                <div className="space-y-6">
-                  {workflows.map((workflow) => (
-                    <div key={workflow.id} className="p-4 rounded-lg border border-mocha/20">
-                      <h3 className="text-lg font-bold text-espresso mb-3">{workflow.title}</h3>
-                      <p className="text-sm text-taupe mb-3">
-                        Step-by-step guide:
-                      </p>
-                      <ol className="space-y-2">
-                        {workflow.steps.map((step, index) => (
-                          <li key={index} className="flex items-start gap-3">
-                            <span className="text-sm font-medium text-mocha">{index + 1}.</span>
-                            <span className="text-sm text-taupe">{step}</span>
-                          </li>
-                        ))}
-                      </ol>
+                {workflows.map((wf) => (
+                  <div key={wf.id} className="card-luxury p-6 sm:p-8">
+                    <h3 className="text-xl font-bold serif-display text-espresso mb-2">{wf.title}</h3>
+                    <p className="text-xs font-mono font-bold uppercase tracking-wider text-[#6F4E37] mb-5">
+                      Execution Protocol & Verification Sequence
+                    </p>
+                    <div className="space-y-3">
+                      {wf.steps.map((step, idx) => (
+                        <div key={idx} className="flex items-start gap-3.5 p-3 rounded-xl bg-[#F7F5F1] border border-[#D7D0C9]">
+                          <span className="w-6 h-6 rounded-full bg-[#6F4E37] text-white flex items-center justify-center text-xs font-mono font-bold shrink-0">
+                            {idx + 1}
+                          </span>
+                          <span className="text-sm text-espresso font-medium">{step}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             )}
 
+            {/* FAQ Section */}
             {activeSection === "faq" && (
-              <div className="space-y-6">
-                <div className="text-center py-8">
-                  <h2 className="text-2xl font-bold serif-display text-espresso mb-2">
-                    Frequently Asked Questions
-                  </h2>
-                  <p className="text-taupe">
-                    Find answers to common questions
+              <div className="card-luxury p-6 sm:p-8 space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold serif-display text-espresso">Frequently Asked Questions</h2>
+                  <p className="text-xs text-[#5C4F47] mt-1">
+                    Guidance for accounting leads, forensic analysts, and compliance officers
                   </p>
                 </div>
 
-                {/* Search */}
-                <div className="relative max-w-md mx-auto">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-taupe" />
+                {/* Search Box */}
+                <div className="relative max-w-md">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C4F47]" />
                   <input
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search FAQs..."
-                    className="w-full pl-9 pr-4 py-2 bg-platinum border border-mocha/20 rounded-lg text-sm font-mono text-espresso placeholder-taupe focus:outline-none focus:border-mocha focus:ring-1 focus:ring-mocha/20"
+                    placeholder="Search questions or keywords..."
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#D7D0C9] focus:border-[#6F4E37] focus:ring-2 focus:ring-[#6F4E37]/15 rounded-xl text-sm text-espresso placeholder-[#7E7067] shadow-sm"
                   />
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3 pt-2">
                   {filteredFaqs.length > 0 ? (
-                    filteredFaqs.map((faq) => (
-                      <div key={faq.id} className="p-4 rounded-lg border border-mocha/20">
-                        <h3 className="text-lg font-bold text-espresso mb-2">{faq.question}</h3>
-                        <p className="text-sm text-taupe">{faq.answer}</p>
-                      </div>
-                    ))
+                    filteredFaqs.map((faq) => {
+                      const isExpanded = expandedFaq === faq.id;
+                      return (
+                        <div
+                          key={faq.id}
+                          className="rounded-xl border border-[#D7D0C9] overflow-hidden bg-white shadow-sm transition-all"
+                        >
+                          <button
+                            onClick={() => setExpandedFaq(isExpanded ? null : faq.id)}
+                            className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F7F5F1] transition-colors"
+                          >
+                            <span className="font-bold text-sm text-espresso pr-4">{faq.question}</span>
+                            <ChevronDown className={`w-4 h-4 text-[#6F4E37] shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                          </button>
+                          <AnimatePresence>
+                            {isExpanded && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="px-4 pb-4 pt-1 border-t border-[#D7D0C9]/50 bg-[#F7F5F1]/50 text-xs sm:text-sm text-[#5C4F47] leading-relaxed"
+                              >
+                                {faq.answer}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    })
                   ) : (
-                    <div className="text-center py-12">
-                      <HelpCircle className="w-12 h-12 mx-auto text-mocha/30 mb-4" />
-                      <h3 className="text-lg font-medium text-espresso mb-2">
-                        No FAQs found
-                      </h3>
-                      <p className="text-taupe text-sm">
-                        Try adjusting your search term
-                      </p>
+                    <div className="text-center py-10">
+                      <HelpCircle className="w-10 h-10 mx-auto text-[#6F4E37]/40 mb-2" />
+                      <p className="text-sm font-bold text-espresso">No questions found</p>
+                      <p className="text-xs text-[#5C4F47]">Try searching with alternative keywords</p>
                     </div>
                   )}
                 </div>
               </div>
             )}
 
+            {/* Contact Support Section */}
             {activeSection === "contact" && (
-              <div className="space-y-6">
-                <div className="text-center py-8">
-                  <h2 className="text-2xl font-bold serif-display text-espresso mb-2">
-                    Contact Support
-                  </h2>
-                  <p className="text-taupe">
-                    Get in touch with our support team
-                  </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="card-luxury p-6 text-center space-y-4">
+                  <div className="w-12 h-12 rounded-2xl bg-[#6F4E37]/10 flex items-center justify-center mx-auto text-[#6F4E37]">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-espresso">Forensics Advisory Desk</h3>
+                    <p className="text-xs text-[#5C4F47] mt-1">Direct priority channel for urgent fraud or mismatch review</p>
+                  </div>
+                  <a
+                    href="mailto:forensics@tesseract.finance"
+                    className="btn-primary w-full py-2 px-3 text-xs font-bold inline-flex items-center justify-center gap-1.5"
+                  >
+                    <span>forensics@tesseract.finance</span>
+                  </a>
                 </div>
 
-                <div className="max-w-md mx-auto space-y-6">
-                  <div className="p-4 rounded-lg border border-mocha/20 text-center">
-                    <h3 className="text-lg font-bold text-espresso mb-2">Email Support</h3>
-                    <p className="text-sm text-taupe mb-3">
-                      Send us an email and we'll get back to you within 24 hours
-                    </p>
-                    <a
-                      href="mailto:support@tesseract.finance"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-ivory bg-mocha hover:bg-mocha/90 transition-colors"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>support@tesseract.finance</span>
-                    </a>
+                <div className="card-luxury p-6 text-center space-y-4">
+                  <div className="w-12 h-12 rounded-2xl bg-[#6F4E37]/10 flex items-center justify-center mx-auto text-[#6F4E37]">
+                    <BookOpen className="w-6 h-6" />
                   </div>
-
-                  <div className="p-4 rounded-lg border border-mocha/20 text-center">
-                    <h3 className="text-lg font-bold text-espresso mb-2">Documentation</h3>
-                    <p className="text-sm text-taupe mb-3">
-                      Browse our comprehensive documentation
-                    </p>
-                    <a
-                      href="https://docs.tesseract.finance"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-ivory bg-mocha hover:bg-mocha/90 transition-colors"
-                    >
-                      <BookOpen className="w-4 h-4" />
-                      <span>View Documentation</span>
-                    </a>
+                  <div>
+                    <h3 className="text-base font-bold text-espresso">API & Developer Docs</h3>
+                    <p className="text-xs text-[#5C4F47] mt-1">Complete specs for ERP hooks, webhooks, and cryptographic proofs</p>
                   </div>
-
-                  <div className="p-4 rounded-lg border border-mocha/20 text-center">
-                    <h3 className="text-lg font-bold text-espresso mb-2">Live Chat</h3>
-                    <p className="text-sm text-taupe mb-3">
-                      Chat with our support team in real-time
-                    </p>
-                    <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-ivory bg-mocha hover:bg-mocha/90 transition-colors">
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Start Live Chat</span>
-                    </button>
-                  </div>
+                  <a
+                    href="https://docs.tesseract.finance"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-outline w-full py-2 px-3 text-xs font-bold inline-flex items-center justify-center gap-1.5"
+                  >
+                    <span>Read Documentation</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </div>
 
-                <div className="p-4 rounded-lg bg-platinum/50 border border-mocha/10">
-                  <h3 className="text-lg font-bold text-espresso mb-3">Office Hours</h3>
-                  <p className="text-sm text-taupe">
-                    Monday - Friday: 9:00 AM - 5:00 PM (EST)
-                  </p>
-                  <p className="text-sm text-taupe">
-                    Saturday - Sunday: Closed
-                  </p>
+                <div className="card-luxury p-6 text-center space-y-4">
+                  <div className="w-12 h-12 rounded-2xl bg-[#6F4E37]/10 flex items-center justify-center mx-auto text-[#6F4E37]">
+                    <MessageSquare className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-espresso">Live Security Response</h3>
+                    <p className="text-xs text-[#5C4F47] mt-1">24/7 incident response for anomalous unauthorized wire holds</p>
+                  </div>
+                  <button
+                    onClick={() => alert("Connecting to 24/7 Treasury Security Incident Hotline...")}
+                    className="btn-primary w-full py-2 px-3 text-xs font-bold inline-flex items-center justify-center gap-1.5"
+                  >
+                    <span>Initiate Incident Hold</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         </main>
       </div>
     </div>

@@ -6,16 +6,19 @@ import { usePathname } from "next/navigation";
 import {
   Home,
   FileText,
-  Search,
   Link2,
+  Search,
   BarChart3,
+  Layers,
   Settings,
   HelpCircle,
   Menu,
   X,
   ArrowUpRight,
+  ShieldCheck,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -25,7 +28,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -33,80 +36,100 @@ export function Navbar() {
 
   const primaryNavLinks = [
     { name: "Home", href: "/", icon: Home },
-    { name: "Invoices", href: "/invoices", icon: FileText },
     { name: "Reconciliation", href: "/reconciliation", icon: Link2 },
     { name: "Document Check", href: "/document-check", icon: Search, highlight: true },
-    { name: "Activity", href: "/activity", icon: BarChart3 },
+    { name: "Invoices", href: "/invoices", icon: FileText },
+    { name: "Connections", href: "/connections", icon: Layers },
+    { name: "Reports", href: "/reports", icon: BarChart3 },
   ];
 
   const secondaryNavLinks = [
-    { name: "Reports", href: "/reports", icon: BarChart3 },
+    { name: "Activity", href: "/activity", icon: BarChart3 },
     { name: "Settings", href: "/settings", icon: Settings },
     { name: "Help", href: "/help", icon: HelpCircle },
   ];
 
   return (
     <>
-      {/* Toast Notification Banner */}
-      {notification && (
-        <div className="fixed top-20 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg border border-mocha/20 bg-espresso/95 text-xs shadow-xl backdrop-blur-xl animate-in fade-in slide-in-from-top-3">
-          <div className="w-2 h-2 rounded-full bg-mocha animate-ping" />
-          <span className="text-mocha font-semibold font-mono">AUDIT COMMIT:</span>
-          <span className="text-platinum">{notification.message}</span>
-          <button
-            onClick={clearNotification}
-            className="ml-3 text-taupe hover:text-mocha"
-            aria-label="Dismiss notification"
+      {/* Toast Notification Banner with High Contrast */}
+      <AnimatePresence>
+        {notification && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ duration: 0.25 }}
+            className="fixed top-20 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border border-mocha/30 bg-[#30231D] text-xs text-[#F7F5F1] shadow-2xl backdrop-blur-xl"
+            role="status"
+            aria-live="polite"
           >
-            <X className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      )}
+            <span className="w-2 h-2 rounded-full bg-[#E6E0F0] animate-ping" />
+            <span className="text-[#E6E0F0] font-bold font-mono tracking-wide">
+              AUDIT BLOCK:
+            </span>
+            <span className="text-[#FFFFFF] font-medium">{notification.message}</span>
+            <button
+              onClick={clearNotification}
+              className="ml-3 p-1 rounded-lg text-[#E5E4E2] hover:text-[#FFFFFF] hover:bg-white/10 transition-colors"
+              aria-label="Dismiss notification"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? "bg-ivory/85 backdrop-blur-md border-b border-mocha/10 shadow-lg"
-            : "bg-transparent border-b border-transparent"
+            ? "bg-[#F7F5F1]/92 backdrop-blur-md border-b border-[#D7D0C9] shadow-sm py-2.5"
+            : "bg-[#F7F5F1]/60 backdrop-blur-sm border-b border-transparent py-3.5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-8 h-8 rounded-lg border border-mocha/20 bg-gradient-to-br from-mocha/10 to-espresso flex items-center justify-center transition-all duration-300 group-hover:border-mocha group-hover:shadow-[0_0_15px_rgba(111,78,55,0.3)]">
-              <span className="text-lg font-bold serif-display text-mocha">T</span>
-              <div className="absolute inset-0 bg-mocha/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />
+          <Link href="/" className="flex items-center gap-3 group focus:outline-none">
+            <div className="relative w-9 h-9 rounded-xl border border-[#5A3E2A] bg-[#6F4E37] flex items-center justify-center shadow-sm transition-all duration-300 group-hover:bg-[#5A3E2A] group-hover:scale-105">
+              <span className="text-lg font-black serif-display text-white">T</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold serif-display text-espresso">
+              <span className="text-xl font-black serif-display tracking-tight text-[#30231D] group-hover:text-[#6F4E37] transition-colors">
                 TESSERACT
               </span>
-              <span className="text-[10px] font-mono text-taupe uppercase tracking-wider hidden sm:block">
+              <span className="text-[10px] font-mono font-medium text-[#5C4F47] uppercase tracking-wider hidden sm:block">
                 Every transaction leaves evidence
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5" aria-label="Main Navigation">
             {primaryNavLinks.map((link) => {
-              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(`${link.href}`));
               const Icon = link.icon;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-all duration-200 ${
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 relative ${
                     isActive
-                      ? "text-mocha bg-mocha/10 border border-mocha/20"
-                      : "text-espresso hover:text-mocha hover:bg-mocha/5"
+                      ? "text-[#6F4E37] bg-[#6F4E37]/10 border border-[#6F4E37]/25 shadow-xs"
+                      : "text-[#30231D] hover:text-[#6F4E37] hover:bg-[#6F4E37]/5 border border-transparent"
                   }`}
+                  aria-current={isActive ? "page" : undefined}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? "text-mocha" : "text-taupe"}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? "text-[#6F4E37]" : "text-[#5C4F47]"}`} />
                   <span>{link.name}</span>
-                  {link.highlight ? (
-                    <span className="w-1.5 h-1.5 rounded-full bg-mocha animate-pulse" />
-                  ) : null}
+                  {link.highlight && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#6F4E37] animate-pulse" />
+                  )}
+                  {isActive && (
+                    <motion.div
+                      layoutId="navIndicator"
+                      className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#6F4E37] rounded-full"
+                      transition={{ duration: 0.25 }}
+                    />
+                  )}
                 </Link>
               );
             })}
@@ -116,9 +139,9 @@ export function Navbar() {
           <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/reconciliation"
-              className="relative inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-ivory bg-mocha hover:bg-mocha/90 transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98]"
+              className="btn-primary"
             >
-              <span>Start Reconciliation</span>
+              <span>Reconcile Now</span>
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
@@ -127,62 +150,76 @@ export function Navbar() {
           <div className="lg:hidden flex items-center gap-2">
             <Link
               href="/reconciliation"
-              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-mocha text-ivory"
+              className="btn-primary py-1.5 px-3 text-xs"
             >
               Reconcile
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-taupe hover:text-mocha bg-ivory border border-mocha/20"
+              className="p-2 rounded-lg text-[#30231D] hover:text-[#6F4E37] bg-white border border-[#D7D0C9] transition-colors focus:outline-none focus:ring-2 focus:ring-[#6F4E37]"
               aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-ivory border-b border-mocha/10 px-4 pt-3 pb-6 space-y-2 animate-in fade-in slide-in-from-top-2">
-            {primaryNavLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded text-sm ${
-                    isActive
-                      ? "text-mocha bg-mocha/10 font-medium"
-                      : "text-espresso hover:text-mocha"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon className="w-4 h-4 text-taupe" />
-                    <span>{link.name}</span>
-                  </div>
-                </Link>
-              );
-            })}
-            <div className="pt-2 border-t border-mocha/10 mt-2">
-              {secondaryNavLinks.map((link) => {
+        {/* Mobile Dropdown Menu with High Contrast and Animations */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:hidden bg-[#F7F5F1] border-b border-[#D7D0C9] px-4 pt-3 pb-6 space-y-2 shadow-xl overflow-hidden"
+            >
+              {primaryNavLinks.map((link) => {
                 const Icon = link.icon;
+                const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2.5 rounded text-sm text-espresso hover:text-mocha"
+                    className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                      isActive
+                        ? "text-[#6F4E37] bg-[#6F4E37]/12 border border-[#6F4E37]/25"
+                        : "text-[#30231D] hover:text-[#6F4E37] hover:bg-[#6F4E37]/5"
+                    }`}
                   >
-                    <Icon className="w-4 h-4 text-taupe" />
-                    <span>{link.name}</span>
+                    <div className="flex items-center gap-2.5">
+                      <Icon className={`w-4 h-4 ${isActive ? "text-[#6F4E37]" : "text-[#5C4F47]"}`} />
+                      <span>{link.name}</span>
+                    </div>
+                    {link.highlight && (
+                      <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-[#6F4E37] text-white">
+                        Live
+                      </span>
+                    )}
                   </Link>
                 );
               })}
-            </div>
-          </div>
-        )}
+              <div className="pt-2 border-t border-[#D7D0C9] mt-2 space-y-1">
+                {secondaryNavLinks.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-sm font-medium text-[#5C4F47] hover:text-[#30231D] hover:bg-[#E5E4E2]/40 transition-colors"
+                    >
+                      <Icon className="w-4 h-4 text-[#5C4F47]" />
+                      <span>{link.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );

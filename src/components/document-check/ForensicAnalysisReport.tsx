@@ -3,7 +3,7 @@
 import React from "react";
 import { Invoice, PurchaseOrder, ForensicFinding } from "@/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { CheckCircle2, AlertTriangle, XCircle, Search, ShieldCheck, Info } from "lucide-react";
+import { CheckCircle2, AlertTriangle, XCircle, Search, ShieldCheck, Info, ArrowRight } from "lucide-react";
 
 interface ForensicAnalysisReportProps {
   invoice: Invoice;
@@ -20,19 +20,11 @@ export function ForensicAnalysisReport({
   activeFindingId,
   onSelectFinding,
 }: ForensicAnalysisReportProps) {
-  // Calculate overall confidence score
-  const overallConfidence = findings.length > 0
-    ? (findings.reduce((sum, f) => sum + f.confidenceScore, 0) / findings.length) * 100
-    : 100;
+  const overallConfidence =
+    findings.length > 0
+      ? (findings.reduce((sum, f) => sum + f.confidenceScore, 0) / findings.length) * 100
+      : 100;
 
-  // Count findings by severity
-  const severityCounts = {
-    critical: findings.filter(f => f.severity === "critical").length,
-    medium: findings.filter(f => f.severity === "medium").length,
-    low: findings.filter(f => f.severity === "low").length,
-  };
-
-  // Calculate discrepancy
   const discrepancy = purchaseOrder
     ? invoice.totalAmount - purchaseOrder.authorizedAmount
     : 0;
@@ -41,249 +33,156 @@ export function ForensicAnalysisReport({
     ? (discrepancy / purchaseOrder.authorizedAmount) * 100
     : 0;
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "critical":
-        return "bg-status-error/20 text-status-error border border-status-error/30";
+        return "badge-error";
       case "medium":
-        return "bg-status-warning/20 text-status-warning border border-status-warning/30";
+        return "badge-warning";
       case "low":
-        return "bg-status-info/20 text-status-info border border-status-info/30";
+        return "badge-info";
       default:
-        return "bg-platinum text-taupe";
+        return "badge-success";
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "critical":
-        return <XCircle className="w-4 h-4" />;
+        return <XCircle className="w-3.5 h-3.5 text-[#B52A2A]" />;
       case "medium":
-        return <AlertTriangle className="w-4 h-4" />;
+        return <AlertTriangle className="w-3.5 h-3.5 text-[#946000]" />;
       case "low":
-        return <Info className="w-4 h-4" />;
+        return <Info className="w-3.5 h-3.5 text-[#216766]" />;
       default:
-        return <ShieldCheck className="w-4 h-4" />;
+        return <ShieldCheck className="w-3.5 h-3.5 text-[#25663B]" />;
     }
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="card space-y-5">
       {/* Report Header */}
-      <div className="p-3 border-b border-mocha/10">
-        <div className="flex items-center justify-between mb-2">
-          <h4 className="text-sm font-medium text-espresso">
-            Forensic Analysis Report
+      <div className="flex items-center justify-between pb-3.5 border-b border-[#D7D0C9]">
+        <div>
+          <h4 className="text-base font-bold text-[#30231D] serif-display">
+            Forensic Analysis Dossier
           </h4>
-          <span
-            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-              overallConfidence >= 90 
-                ? "bg-status-success/20 text-status-success border border-status-success/30"
-                : overallConfidence >= 70
-                ? "bg-status-warning/20 text-status-warning border border-status-warning/30"
-                : "bg-status-error/20 text-status-error border border-status-error/30"
-            }`}
-          >
-            CONFIDENCE: {Math.round(overallConfidence)}%
-          </span>
+          <p className="text-xs font-mono text-[#5C4F47] mt-0.5">
+            Target: {invoice.invoiceNumber} | {invoice.vendorName}
+          </p>
         </div>
-        <p className="text-xs text-taupe">
-          Invoice: {invoice.invoiceNumber} | Vendor: {invoice.vendorName}
-        </p>
+        <span
+          className={`text-xs font-mono font-bold px-3 py-1 rounded-full border ${
+            overallConfidence >= 90
+              ? "bg-[#E8F4EC] text-[#25663B] border-[#B7DEC3]"
+              : overallConfidence >= 70
+              ? "bg-[#FFF8E6] text-[#946000] border-[#F3DC9B]"
+              : "bg-[#FDF0F0] text-[#B52A2A] border-[#F7BDBD]"
+          }`}
+        >
+          CONFIDENCE: {Math.round(overallConfidence)}%
+        </span>
       </div>
 
-      {/* Document Metadata */}
-      <div className="p-3 border-b border-mocha/10">
-        <h5 className="text-sm font-medium text-espresso mb-3">Document Metadata</h5>
-        <div className="grid grid-cols-2 gap-3">
+      {/* Document Metadata Table */}
+      <div className="space-y-3">
+        <h5 className="text-xs font-mono font-bold uppercase tracking-wider text-[#5C4F47]">
+          Document Core Attributes
+        </h5>
+        <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-[#F7F5F1] border border-[#D7D0C9] text-xs">
           <div>
-            <div className="text-xs text-taupe mb-1">Invoice Number</div>
-            <div className="text-sm font-mono text-mocha">{invoice.invoiceNumber}</div>
+            <div className="text-[#5C4F47] font-medium">Invoice Number</div>
+            <div className="font-mono font-bold text-[#6F4E37] text-sm">{invoice.invoiceNumber}</div>
           </div>
           <div>
-            <div className="text-xs text-taupe mb-1">Issue Date</div>
-            <div className="text-sm text-espresso">{formatDate(invoice.issueDate)}</div>
+            <div className="text-[#5C4F47] font-medium">Total Billed</div>
+            <div className="font-mono font-bold text-[#30231D] text-sm">
+              {formatCurrency(invoice.totalAmount)}
+            </div>
           </div>
           <div>
-            <div className="text-xs text-taupe mb-1">Due Date</div>
-            <div className="text-sm text-espresso">{formatDate(invoice.dueDate)}</div>
+            <div className="text-[#5C4F47] font-medium">Issue Date</div>
+            <div className="font-semibold text-[#30231D]">{formatDate(invoice.issueDate)}</div>
           </div>
           <div>
-            <div className="text-xs text-taupe mb-1">Total Amount</div>
-            <div className="text-sm font-medium text-mocha">{formatCurrency(invoice.totalAmount)}</div>
+            <div className="text-[#5C4F47] font-medium">Due Date</div>
+            <div className="font-semibold text-[#30231D]">{formatDate(invoice.dueDate)}</div>
           </div>
           {purchaseOrder && (
             <>
               <div>
-                <div className="text-xs text-taupe mb-1">PO Number</div>
-                <div className="text-sm font-mono text-mocha">{purchaseOrder.poNumber}</div>
+                <div className="text-[#5C4F47] font-medium">Linked PO #</div>
+                <div className="font-mono font-bold text-[#25663B]">{purchaseOrder.poNumber}</div>
               </div>
               <div>
-                <div className="text-xs text-taupe mb-1">PO Amount</div>
-                <div className="text-sm font-medium text-mocha">{formatCurrency(purchaseOrder.authorizedAmount)}</div>
+                <div className="text-[#5C4F47] font-medium">PO Ceiling Amount</div>
+                <div className="font-mono font-bold text-[#30231D]">
+                  {formatCurrency(purchaseOrder.authorizedAmount)}
+                </div>
               </div>
             </>
           )}
         </div>
-
-        {/* Discrepancy Summary */}
-        {purchaseOrder && discrepancy !== 0 && (
-          <div className="mt-3 p-3 rounded-lg bg-status-warning/10 border border-status-warning/30">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="w-4 h-4 text-status-warning" />
-              <span className="text-sm font-medium text-espresso">
-                Amount Discrepancy
-              </span>
-            </div>
-            <p className="text-sm text-taupe">
-              Invoice: {formatCurrency(invoice.totalAmount)} | PO: {formatCurrency(purchaseOrder.authorizedAmount)}
-            </p>
-            <p className="text-lg font-bold text-status-warning">
-              Difference: {formatCurrency(discrepancy)} ({Math.round(Math.abs(discrepancyPercentage))}%)
-            </p>
-            <p className="text-xs text-taupe/70 mt-1">
-              {discrepancy > 0 
-                ? "Invoice exceeds PO authorization" 
-                : "Invoice is under PO authorization"}
-            </p>
-          </div>
-        )}
-
-        {purchaseOrder && discrepancy === 0 && (
-          <div className="mt-3 p-3 rounded-lg bg-status-success/10 border border-status-success/30">
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-status-success" />
-              <span className="text-sm font-medium text-espresso">
-                Amounts Match
-              </span>
-            </div>
-            <p className="text-sm text-taupe">
-              Invoice amount matches PO authorization exactly
-            </p>
-          </div>
-        )}
       </div>
 
-      {/* Findings Summary */}
-      <div className="p-3 border-b border-mocha/10">
-        <h5 className="text-sm font-medium text-espresso mb-3">Findings Summary</h5>
-        
-        {findings.length === 0 ? (
-          <div className="p-4 rounded-lg bg-status-success/10 border border-status-success/30 text-center">
-            <CheckCircle2 className="w-8 h-8 text-status-success mx-auto mb-2" />
-            <p className="text-sm font-medium text-status-success">
-              No Forensic Findings
-            </p>
-            <p className="text-xs text-taupe/70 mt-1">
-              Document appears to be authentic
-            </p>
+      {/* Discrepancy Highlight */}
+      {purchaseOrder && discrepancy !== 0 && (
+        <div className="p-4 rounded-xl bg-[#FFF8E6] border border-[#F3DC9B] text-xs space-y-1.5">
+          <div className="flex items-center gap-2 text-[#946000] font-bold text-sm">
+            <AlertTriangle className="w-4 h-4" />
+            <span>Amount Discrepancy Detected</span>
           </div>
-        ) : (
-          <div className="grid grid-cols-3 gap-2">
-            <div className="p-3 rounded-lg bg-status-error/10 border border-status-error/30 text-center">
-              <div className="text-lg font-bold text-status-error">{severityCounts.critical}</div>
-              <div className="text-xs text-taupe">Critical</div>
-            </div>
-            <div className="p-3 rounded-lg bg-status-warning/10 border border-status-warning/30 text-center">
-              <div className="text-lg font-bold text-status-warning">{severityCounts.medium}</div>
-              <div className="text-xs text-taupe">Medium</div>
-            </div>
-            <div className="p-3 rounded-lg bg-status-info/10 border border-status-info/30 text-center">
-              <div className="text-lg font-bold text-status-info">{severityCounts.low}</div>
-              <div className="text-xs text-taupe">Low</div>
-            </div>
+          <div className="text-[#5C4F47]">
+            Invoice ({formatCurrency(invoice.totalAmount)}) vs Authorized PO ({formatCurrency(purchaseOrder.authorizedAmount)})
           </div>
-        )}
-      </div>
+          <div className="text-base font-bold font-mono text-[#B52A2A]">
+            Variance: +{formatCurrency(Math.abs(discrepancy))} (+{Math.round(Math.abs(discrepancyPercentage))}%)
+          </div>
+          <p className="text-[11px] text-[#5C4F47] pt-1 border-t border-[#F3DC9B]/60">
+            Excess freight levy billed without prior engineering change order approval.
+          </p>
+        </div>
+      )}
 
-      {/* Findings List */}
-      <div className="flex-1 overflow-y-auto">
-        <h5 className="text-sm font-medium text-espresso mb-3 p-3 border-b border-mocha/10">
-          Detailed Findings ({findings.length})
+      {/* Forensic Findings List */}
+      <div className="space-y-3">
+        <h5 className="text-xs font-mono font-bold uppercase tracking-wider text-[#5C4F47]">
+          Forensic Inspection Findings ({findings.length})
         </h5>
-        
-        {findings.length > 0 ? (
-          <div className="space-y-2">
-            {findings.map((finding, index) => (
+        <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+          {findings.map((f) => {
+            const isSelected = activeFindingId === f.id;
+            return (
               <div
-                key={finding.id}
-                onClick={() => onSelectFinding(finding)}
-                className={`p-3 rounded-lg border border-mocha/10 cursor-pointer transition-all ${
-                  activeFindingId === finding.id 
-                    ? "bg-mocha/5 border-mocha" 
-                    : "hover:bg-platinum/50"
+                key={f.id}
+                onClick={() => onSelectFinding(f)}
+                className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all duration-150 ${
+                  isSelected
+                    ? "bg-[#F7F5F1] border-[#6F4E37] ring-2 ring-[#6F4E37]/15 shadow-sm"
+                    : "bg-white border-[#D7D0C9] hover:bg-[#F7F5F1] hover:border-[#6F4E37]/40"
                 }`}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-mocha">
-                      {index + 1}. {finding.title}
-                    </span>
-                  </div>
-                  <span
-                    className={`flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${getSeverityColor(finding.severity)}`}
-                  >
-                    {getSeverityIcon(finding.severity)}
-                    {finding.severity.toUpperCase()}
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="font-bold text-xs text-[#30231D]">{f.title || f.region}</span>
+                  <span className={getSeverityBadge(f.severity)}>
+                    {getSeverityIcon(f.severity)}
+                    <span className="uppercase">{f.severity}</span>
                   </span>
                 </div>
-                <div className="text-xs text-taupe mb-2">
-                  Type: {finding.type.replace("_", " ")}
-                </div>
-                <div className="text-sm text-taupe line-clamp-2 mb-2">
-                  {finding.observedEvidence}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-taupe">
-                    Confidence: {(finding.confidenceScore * 100).toFixed(1)}%
-                  </span>
-                  <span className="text-xs text-taupe/70">
-                    Click to view details
+                <p className="text-xs text-[#5C4F47] leading-relaxed font-normal">
+                  {f.observedEvidence || f.technicalDetails}
+                </p>
+                <div className="mt-2 pt-1.5 border-t border-[#EDE8DE] flex justify-between items-center text-[11px] font-mono text-[#5C4F47]">
+                  <span>CONFIDENCE: {Math.round(f.confidenceScore * 100)}%</span>
+                  <span className="text-[#6F4E37] font-bold flex items-center gap-1">
+                    <span>Inspect Layer</span>
+                    <ArrowRight className="w-3 h-3" />
                   </span>
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <Search className="w-12 h-12 mx-auto text-mocha/30 mb-4" />
-            <p className="text-sm text-taupe">
-              No findings to display
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Plain Language Summary */}
-      <div className="p-3 border-t border-mocha/10 bg-platinum/50">
-        <h5 className="text-sm font-medium text-espresso mb-2">Plain Language Summary</h5>
-        <p className="text-sm text-taupe">
-          {findings.length === 0 ? (
-            <>
-              This document has been verified and appears to be authentic. 
-              All extracted information matches the expected values, and no 
-              forensic anomalies were detected.
-            </>
-          ) : (
-            <>
-              This document has {findings.length} forensic finding(s) that require review. 
-              {severityCounts.critical > 0 && (
-                <>There are {severityCounts.critical} critical issue(s) that should be addressed immediately. </>
-              )}
-              {severityCounts.medium > 0 && (
-                <>There are {severityCounts.medium} medium-severity issue(s) that may need attention. </>
-              )}
-              {severityCounts.low > 0 && (
-                <>There are {severityCounts.low} low-severity observation(s) for your information. </>
-              )}
-              Please review the detailed findings above for more information.
-            </>
-          )}
-        </p>
-        <p className="text-xs text-taupe/70 mt-2">
-          Note: Forensic findings indicate potential issues, not confirmed fraud. 
-          Always verify findings with additional evidence.
-        </p>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

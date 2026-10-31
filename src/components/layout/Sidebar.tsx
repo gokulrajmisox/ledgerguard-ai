@@ -13,6 +13,8 @@ import {
   Settings,
   HelpCircle,
   AlertTriangle,
+  ChevronRight,
+  ShieldCheck,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 
@@ -22,7 +24,6 @@ export function Sidebar() {
 
   const primaryItems = [
     { label: "Home", href: "/", icon: Home },
-    { label: "Invoices", href: "/invoices", icon: FileText },
     { label: "Reconciliation", href: "/reconciliation", icon: Link2 },
     {
       label: "Document Check",
@@ -30,72 +31,87 @@ export function Sidebar() {
       icon: Search,
       highlight: true,
     },
+    { label: "Invoices", href: "/invoices", icon: FileText },
     { label: "Connections", href: "/connections", icon: Layers },
-    { label: "Activity", href: "/activity", icon: BarChart3 },
+    { label: "Reports", href: "/reports", icon: BarChart3 },
+    { label: "Activity Feed", href: "/activity", icon: BarChart3 },
   ];
 
   const secondaryItems = [
-    { label: "Reports", href: "/reports", icon: BarChart3 },
     { label: "Settings", href: "/settings", icon: Settings },
-    { label: "Help", href: "/help", icon: HelpCircle },
+    { label: "Help & Docs", href: "/help", icon: HelpCircle },
   ];
 
+  const activeDiscrepancies = cases.filter(
+    (c) => c.status === "investigating" || c.status === "under_review"
+  );
+
   return (
-    <aside className="w-64 border-r border-mocha/10 bg-ivory shrink-0 hidden md:flex flex-col min-h-screen">
+    <aside className="w-64 border-r border-[#D7D0C9] bg-[#F7F5F1] shrink-0 hidden md:flex flex-col min-h-[calc(100vh-4rem)]">
       {/* Top Brand Tag */}
-      <div className="p-4 border-b border-mocha/10">
+      <div className="p-4 border-b border-[#D7D0C9] bg-white/40">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-taupe">
-            TESSERACT
+          <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#5C4F47]">
+            TESSERACT OPS
           </span>
-          <span className="flex items-center gap-1 text-[10px] font-mono text-mocha">
-            <span className="w-1.5 h-1.5 rounded-full bg-mocha animate-pulse" />
-            ACTIVE
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#E8F4EC] border border-[#B7DEC3] text-[10px] font-mono font-bold text-[#25663B]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#25663B] animate-pulse" />
+            LIVE
           </span>
         </div>
       </div>
 
       {/* Primary Navigation */}
-      <div className="p-3 space-y-1 flex-1">
-        <div className="px-3 py-2 text-[10px] font-mono uppercase text-taupe tracking-wider">
-          Main Navigation
+      <div className="p-3 space-y-1 flex-1 overflow-y-auto">
+        <div className="px-3 pt-2 pb-1.5 text-[11px] font-mono font-bold uppercase text-[#5C4F47] tracking-wider">
+          Workspace
         </div>
         {primaryItems.map((item) => {
-          const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+          const isActive =
+            pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
           const Icon = item.icon;
           return (
             <Link
               key={item.label}
               href={item.href}
-              className={`flex items-center justify-between px-3 py-2 rounded text-sm font-medium transition-all ${
+              className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-150 ${
                 isActive
-                  ? "bg-mocha/10 text-mocha border border-mocha/20 shadow-sm"
-                  : "text-espresso hover:text-mocha hover:bg-mocha/5"
+                  ? "bg-[#6F4E37]/12 text-[#6F4E37] border border-[#6F4E37]/30 shadow-xs"
+                  : "text-[#30231D] hover:text-[#6F4E37] hover:bg-[#6F4E37]/6 border border-transparent"
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <Icon className={`w-4 h-4 ${isActive ? "text-mocha" : "text-taupe"}`} />
+                <Icon
+                  className={`w-4 h-4 transition-colors ${
+                    isActive ? "text-[#6F4E37]" : "text-[#5C4F47]"
+                  }`}
+                />
                 <span>{item.label}</span>
               </div>
               {item.highlight && (
-                <span className="w-1.5 h-1.5 rounded-full bg-mocha animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6F4E37] animate-pulse" />
               )}
             </Link>
           );
         })}
 
-        <div className="pt-4 px-3 py-2 text-[10px] font-mono uppercase text-taupe tracking-wider">
-          Additional
+        <div className="pt-5 px-3 pb-1.5 text-[11px] font-mono font-bold uppercase text-[#5C4F47] tracking-wider">
+          Configuration
         </div>
         {secondaryItems.map((item) => {
+          const isActive = pathname === item.href;
           const Icon = item.icon;
           return (
             <Link
               key={item.label}
               href={item.href}
-              className="flex items-center gap-2.5 px-3 py-2 rounded text-sm font-medium text-espresso hover:text-mocha hover:bg-mocha/5 transition-all"
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
+                isActive
+                  ? "bg-[#6F4E37]/12 text-[#6F4E37] border border-[#6F4E37]/30"
+                  : "text-[#30231D] hover:text-[#6F4E37] hover:bg-[#6F4E37]/6 border border-transparent"
+              }`}
             >
-              <Icon className="w-4 h-4 text-taupe" />
+              <Icon className="w-4 h-4 text-[#5C4F47]" />
               <span>{item.label}</span>
             </Link>
           );
@@ -103,28 +119,32 @@ export function Sidebar() {
       </div>
 
       {/* Live Discrepancy Alert Widget */}
-      {cases.filter(c => c.status === "investigating" || c.status === "under_review").length > 0 && (
-        <div className="p-3 m-3 rounded-lg border border-mocha/30 bg-mocha/5 text-xs">
-          <div className="flex items-center gap-2 text-mocha font-semibold text-[11px] mb-1">
-            <AlertTriangle className="w-3.5 h-3.5" />
+      {activeDiscrepancies.length > 0 && (
+        <div className="p-3.5 m-3 rounded-xl border border-[#F3DC9B] bg-[#FFF8E6] text-xs shadow-xs">
+          <div className="flex items-center gap-2 text-[#946000] font-bold text-xs mb-1.5">
+            <AlertTriangle className="w-4 h-4" />
             <span>Active Discrepancies</span>
           </div>
-          <p className="text-[11px] text-taupe leading-tight mb-2">
-            {cases.filter(c => c.status === "investigating" || c.status === "under_review").length} items need attention
+          <p className="text-xs text-[#5C4F47] font-medium leading-relaxed mb-2.5">
+            {activeDiscrepancies.length} item{activeDiscrepancies.length > 1 ? "s" : ""} flagged for human sign-off.
           </p>
           <Link
             href="/reconciliation"
-            className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-mocha hover:underline"
+            className="inline-flex items-center gap-1 text-xs font-bold text-[#6F4E37] hover:text-[#5A3E2A] hover:underline"
           >
-            Review Now 
+            <span>Review Matrix</span>
+            <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       )}
 
       {/* System Footer */}
-      <div className="p-3 border-t border-mocha/10 text-[10px] font-mono text-taupe flex items-center justify-between">
-        <span>TESSERACT v1.0</span>
-        <span className="text-taupe/70">Financial Intelligence</span>
+      <div className="p-3.5 border-t border-[#D7D0C9] bg-white/40 text-[11px] font-mono text-[#5C4F47] flex items-center justify-between">
+        <span className="font-semibold">TESSERACT v1.0</span>
+        <span className="text-[#25663B] font-bold flex items-center gap-1">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          VERIFIED
+        </span>
       </div>
     </aside>
   );

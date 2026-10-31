@@ -2,203 +2,131 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Mail, ExternalLink } from "lucide-react";
+import { ShieldCheck, Mail, ArrowUpRight, Lock, CheckCircle2 } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-espresso text-platinum py-12 px-4 sm:px-6 lg:px-8">
+    <footer className="bg-[#30231D] text-[#E5E4E2] py-14 px-4 sm:px-6 lg:px-8 border-t border-[#4A3B32]">
       <div className="max-w-7xl mx-auto">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-4 md:col-span-1">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg border border-mocha bg-mocha flex items-center justify-center">
-                <span className="text-lg font-bold serif-display text-espresso">T</span>
+              <div className="w-9 h-9 rounded-xl border border-[#D7D0C9]/20 bg-[#6F4E37] flex items-center justify-center shadow-md">
+                <span className="text-lg font-black serif-display text-white">T</span>
               </div>
               <div>
-                <div className="text-lg font-bold serif-display text-ivory">TESSERACT</div>
-                <div className="text-xs text-platinum/70 uppercase tracking-wider">
+                <div className="text-xl font-black serif-display text-white tracking-tight">
+                  TESSERACT
+                </div>
+                <div className="text-[11px] font-mono text-[#E6E0F0] uppercase tracking-wider font-semibold">
                   Financial Intelligence
                 </div>
               </div>
             </div>
-            <p className="text-sm text-platinum/70">
-              Every transaction leaves evidence. Tesseract helps you find it.
+            <p className="text-sm text-[#E5E4E2]/90 leading-relaxed font-normal">
+              Every transaction leaves evidence. Autonomous invoice reconciliation, document forensics, and cryptographic audit assurance.
             </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-[#E6E0F0]">
+              <Lock className="w-3.5 h-3.5 text-[#E6E0F0]" />
+              <span>SOC2 Type II • Zero Data Retention</span>
+            </div>
           </div>
 
           {/* Product Links */}
           <div>
-            <h4 className="text-sm font-semibold text-ivory mb-4 uppercase tracking-wider">
-              Product
+            <h4 className="text-xs font-bold text-white mb-4 uppercase tracking-wider font-mono">
+              Platform Modules
             </h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/invoices"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Invoices
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/reconciliation"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Reconciliation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/document-check"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Document Check
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/connections"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Connections
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/activity"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Activity
-                </Link>
-              </li>
+            <ul className="space-y-2.5">
+              {[
+                { label: "Overview", href: "/" },
+                { label: "Reconciliation Matrix", href: "/reconciliation" },
+                { label: "Document Check", href: "/document-check" },
+                { label: "Invoices Directory", href: "/invoices" },
+                { label: "Entity Connections", href: "/connections" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-[#E5E4E2] hover:text-white transition-colors flex items-center gap-1 group font-medium"
+                  >
+                    <span>{item.label}</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Resources */}
           <div>
-            <h4 className="text-sm font-semibold text-ivory mb-4 uppercase tracking-wider">
-              Resources
+            <h4 className="text-xs font-bold text-white mb-4 uppercase tracking-wider font-mono">
+              Intelligence & Governance
             </h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/reports"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Reports
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/settings"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Settings
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/help"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="https://docs.tesseract.finance"
-                  target="_blank"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Documentation
-                </Link>
-              </li>
+            <ul className="space-y-2.5">
+              {[
+                { label: "Analytics & Reports", href: "/reports" },
+                { label: "Activity Audit Stream", href: "/activity" },
+                { label: "Security & Cryptography", href: "/help" },
+                { label: "System Settings", href: "/settings" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-[#E5E4E2] hover:text-white transition-colors flex items-center gap-1 group font-medium"
+                  >
+                    <span>{item.label}</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Legal & Contact */}
-          <div>
-            <h4 className="text-sm font-semibold text-ivory mb-4 uppercase tracking-wider">
-              Legal & Contact
+          {/* Contact & Status */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold text-white mb-4 uppercase tracking-wider font-mono">
+              System Health
             </h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="mailto:support@tesseract.finance"
-                  className="text-sm text-platinum/70 hover:text-ivory transition-colors flex items-center gap-2"
-                >
-                  <Mail className="w-4 h-4" />
-                  <span>support@tesseract.finance</span>
-                </a>
-              </li>
-            </ul>
-
-            {/* Social Links */}
-            <div className="flex items-center gap-4 mt-6">
-              <a
-                href="https://github.com/tesseract-finance"
-                target="_blank"
-                className="text-platinum/70 hover:text-ivory transition-colors flex items-center gap-1"
-                aria-label="GitHub"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span className="text-xs">GitHub</span>
-              </a>
-              <a
-                href="https://twitter.com/tesseract_finance"
-                target="_blank"
-                className="text-platinum/70 hover:text-ivory transition-colors flex items-center gap-1"
-                aria-label="Twitter"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span className="text-xs">Twitter</span>
-              </a>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-[#E5E4E2]">Engine State</span>
+                <span className="inline-flex items-center gap-1.5 text-[#E6E0F0] font-bold">
+                  <span className="w-2 h-2 rounded-full bg-[#E6E0F0] animate-pulse" />
+                  Operational
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-[#E5E4E2]">Active Rail</span>
+                <span className="text-white font-bold">Merkle SHA-256</span>
+              </div>
+              <div className="pt-2 border-t border-white/10 text-xs text-[#E5E4E2]">
+                Continuous monitoring of all inbound and matched records.
+              </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-mocha/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-mocha" />
-            <span className="text-xs text-platinum/70">
-              Cryptographic Audit Trail | Immutable Evidence
-            </span>
+        <div className="pt-8 border-t border-[#4A3B32] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#D7D0C9]">
+          <div>
+            © 2026 TESSERACT Technologies Inc. All rights reserved.
           </div>
-          <div className="text-xs text-platinum/70">
-            © 2024 Tesseract. All rights reserved.
+          <div className="flex items-center gap-6">
+            <Link href="/help" className="hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/help" className="hover:text-white transition-colors">
+              Terms of Assurance
+            </Link>
+            <Link href="/help" className="hover:text-white transition-colors">
+              Audit Standards
+            </Link>
           </div>
         </div>
       </div>
     </footer>
   );
 }
-
-export default Footer;
