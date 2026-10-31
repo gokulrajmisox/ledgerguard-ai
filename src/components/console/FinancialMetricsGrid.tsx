@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useAppStore } from "@/lib/store";
-import { formatCurrency, formatCompactNumber } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import {
   FileText,
   CheckCircle2,
@@ -18,7 +18,7 @@ export function FinancialMetricsGrid() {
   const cards = [
     {
       title: "Total Invoices Processed",
-      value: formatCompactNumber(metrics.totalProcessed),
+      value: metrics.totalProcessed.toLocaleString(),
       raw: metrics.totalProcessed.toLocaleString(),
       subtext: "Last 30-day billing volume",
       status: "neutral",

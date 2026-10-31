@@ -2,103 +2,203 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, GitBranch, Terminal, ExternalLink, Activity } from "lucide-react";
+import { ShieldCheck, Mail, ExternalLink } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#050507] text-zinc-400 py-12 px-4 sm:px-6 lg:px-8 mt-auto">
+    <footer className="bg-espresso text-platinum py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-white/[0.05]">
-          {/* Brand Info */}
-          <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00ff87]" />
-              <span className="text-sm font-bold tracking-wider text-white uppercase">
-                TESSERACT • LEDGERGUARD AI
-              </span>
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          {/* Brand */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg border border-mocha bg-mocha flex items-center justify-center">
+                <span className="text-lg font-bold serif-display text-espresso">T</span>
+              </div>
+              <div>
+                <div className="text-lg font-bold serif-display text-ivory">TESSERACT</div>
+                <div className="text-xs text-platinum/70 uppercase tracking-wider">
+                  Financial Intelligence
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-zinc-400 max-w-md leading-relaxed">
-              Autonomous finance intelligence and multi-modal invoice forensics. Every transaction
-              leaves evidence—our deterministic matching engine and computer vision neural agents
-              turn subtle anomalies into court-admissible audit trails.
+            <p className="text-sm text-platinum/70">
+              Every transaction leaves evidence. Tesseract helps you find it.
             </p>
-            <div className="flex items-center gap-4 text-[11px] font-mono text-zinc-500 pt-2">
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] animate-pulse" />
-                KERNEL: ACTIVE (v3.4.12)
-              </span>
-              <span>•</span>
-              <span>MERKLE BLOCK: 0x8f19e4a2bc</span>
-              <span>•</span>
-              <span>ENCRYPTION: AES-256-GCM</span>
+          </div>
+
+          {/* Product Links */}
+          <div>
+            <h4 className="text-sm font-semibold text-ivory mb-4 uppercase tracking-wider">
+              Product
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/invoices"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Invoices
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/reconciliation"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Reconciliation
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/document-check"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Document Check
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/connections"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Connections
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/activity"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Activity
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h4 className="text-sm font-semibold text-ivory mb-4 uppercase tracking-wider">
+              Resources
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/reports"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Reports
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/settings"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Settings
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/help"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.tesseract.finance"
+                  target="_blank"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Documentation
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal & Contact */}
+          <div>
+            <h4 className="text-sm font-semibold text-ivory mb-4 uppercase tracking-wider">
+              Legal & Contact
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors"
+                >
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@tesseract.finance"
+                  className="text-sm text-platinum/70 hover:text-ivory transition-colors flex items-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>support@tesseract.finance</span>
+                </a>
+              </li>
+            </ul>
+
+            {/* Social Links */}
+            <div className="flex items-center gap-4 mt-6">
+              <a
+                href="https://github.com/tesseract-finance"
+                target="_blank"
+                className="text-platinum/70 hover:text-ivory transition-colors flex items-center gap-1"
+                aria-label="GitHub"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="text-xs">GitHub</span>
+              </a>
+              <a
+                href="https://twitter.com/tesseract_finance"
+                target="_blank"
+                className="text-platinum/70 hover:text-ivory transition-colors flex items-center gap-1"
+                aria-label="Twitter"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="text-xs">Twitter</span>
+              </a>
             </div>
-          </div>
-
-          {/* Core Modules */}
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-3 font-mono">
-              Intelligence Modules
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link href="/console" className="hover:text-[#00ff87] transition-colors">
-                  Command Center Console
-                </Link>
-              </li>
-              <li>
-                <Link href="/forensics" className="hover:text-[#00ff87] transition-colors">
-                  AI Image Forensics Lab
-                </Link>
-              </li>
-              <li>
-                <Link href="/investigations" className="hover:text-[#00ff87] transition-colors">
-                  Investigation Cases Queue
-                </Link>
-              </li>
-              <li>
-                <Link href="/evidence" className="hover:text-[#00ff87] transition-colors">
-                  Evidence Graph & Replay
-                </Link>
-              </li>
-              <li>
-                <Link href="/mission-control" className="hover:text-[#00ff87] transition-colors">
-                  Agent Mission Control
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Trust & Compliance */}
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-3 font-mono">
-              Compliance & Safety
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link href="/benchmarks" className="hover:text-[#00ff87] transition-colors">
-                  Accuracy Benchmarks
-                </Link>
-              </li>
-              <li className="text-zinc-500">Dual-Signoff Policy Rules</li>
-              <li className="text-zinc-500">SOX-404 Cryptographic Audit</li>
-              <li className="text-zinc-500">Deterministic Rate Guardrails</li>
-            </ul>
           </div>
         </div>
 
-        {/* Disclaimer & Copyright */}
-        <div className="pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[11px] text-zinc-500 font-mono">
-          <div className="max-w-2xl">
-            <span className="text-zinc-400 font-semibold">SYNTHETIC BENCHMARK FIXTURE: </span>
-            All demonstration documents, vendor names, line items, and transaction logs are
-            synthetic fixtures generated for platform evaluation. LedgerGuard AI does not alter real
-            financial accounts or execute live bank settlements without explicit human governance.
+        {/* Bottom Bar */}
+        <div className="border-t border-mocha/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-mocha" />
+            <span className="text-xs text-platinum/70">
+              Cryptographic Audit Trail | Immutable Evidence
+            </span>
           </div>
-          <div className="shrink-0 text-zinc-500">
-            © 2026 Tesseract Intelligence Inc. All rights reserved.
+          <div className="text-xs text-platinum/70">
+            © 2024 Tesseract. All rights reserved.
           </div>
         </div>
       </div>
     </footer>
   );
 }
+
+export default Footer;

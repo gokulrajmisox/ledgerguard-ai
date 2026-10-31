@@ -465,6 +465,7 @@ export const DEMO_CASES: InvestigationCase[] = [
       "Requires dual approval: Forensic Lead (Level 2) and Treasury Operations Sign-off.",
     forensicFindings: [
       {
+        severity: "critical",
         id: "ff-01",
         region: "Grand Total Region [BBox: 72% X, 84% Y]",
         type: "font_raster_anomaly",
@@ -488,6 +489,7 @@ export const DEMO_CASES: InvestigationCase[] = [
         },
       },
       {
+        severity: "critical",
         id: "ff-02",
         region: "Line Item 1 Unit Price [BBox: 62% X, 52% Y]",
         type: "ocr_layer_mismatch",
@@ -511,6 +513,7 @@ export const DEMO_CASES: InvestigationCase[] = [
         },
       },
       {
+        severity: "critical",
         id: "ff-03",
         region: "Document Metadata Stream",
         type: "metadata_timestamp_conflict",
@@ -563,6 +566,7 @@ export const DEMO_CASES: InvestigationCase[] = [
     approvalRequirements: "Chief Information Security Officer and Treasury Controller sign-off.",
     forensicFindings: [
       {
+        severity: "critical",
         id: "ff-04",
         region: "Remittance Banking Instructions [BBox: 15% X, 75% Y]",
         type: "routing_number_divergence",
@@ -623,6 +627,7 @@ export const DEMO_CASES: InvestigationCase[] = [
     approvalRequirements: "Logistics Category Manager approval required.",
     forensicFindings: [
       {
+        severity: "critical",
         id: "ff-05",
         region: "Fuel Surcharge Line [BBox: 55% X, 60% Y]",
         type: "ocr_layer_mismatch",

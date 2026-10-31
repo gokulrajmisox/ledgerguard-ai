@@ -1,30 +1,47 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AppStoreProvider } from "@/lib/store";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "LedgerGuard AI — Autonomous Finance Intelligence & Invoice Forensics",
+  title: "Tesseract | Every transaction leaves evidence.",
   description:
-    "An autonomous finance intelligence platform by Tesseract that reconciles transactions, investigates suspicious invoices, and turns financial discrepancies into evidence-backed decisions.",
+    "Tesseract is a premium financial intelligence platform that reconciles transactions, investigates discrepancies, and turns financial data into evidence-backed decisions.",
   keywords: [
-    "finance intelligence",
-    "invoice forensics",
-    "autonomous reconciliation",
-    "fraud detection",
-    "financial audit",
-    "3-way matching",
+    "financial intelligence",
+    "invoice reconciliation",
+    "document verification",
+    "audit trail",
+    "financial forensics",
+    "payment matching",
   ],
+  authors: [{ name: "Tesseract" }],
+  openGraph: {
+    title: "Tesseract | Every transaction leaves evidence.",
+    description:
+      "Reconcile transactions, verify documents, and make evidence-backed financial decisions.",
+    url: "https://tesseract.finance",
+    siteName: "Tesseract",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -35,9 +52,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased selection:bg-[#00ff87] selection:text-black`}
+      className={`${inter.variable} ${playfair.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[#070709] text-[#f4f4f7] overflow-x-hidden tech-grid">
+      <body className="min-h-screen flex flex-col bg-[#F7F5F1] text-[#30231D] antialiased">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <AppStoreProvider>{children}</AppStoreProvider>
       </body>
     </html>
